@@ -1,30 +1,18 @@
 import { useState } from 'react';
-import Layout from '../components/Layout.component';
-
-
-const dynamicFormJS = {
-    name: '',
-    email: '',
-    password: '',
-    error: '',
-    success: '',
-    buttonText: 'Register'
-};
-
-const controlsNameArr = []
-
-Object.keys(dynamicFormJS).forEach(function(key,index) {
-    // key: the name of the object key
-    // index: the ordinal position of the key within the object 
-    controlsNameArr.push(key);
-});
+import Layout from '../components/Layout';
+import axios from 'axios';
 
 const Register = () => {
     const [state, setState] = useState({
-        dynamicFormJS
+        name: '',
+        email: '',
+        password: '',
+        error: '',
+        success: '',
+        buttonText: 'Register'
     });
 
-    // const { ...controlsNameArr } = state; //refs
+    const { name, email, password, error, success, buttonText } = state;
 
     const handleChange = name => e => {
         setState({ ...state, [name]: e.target.value, error: '', success: '', buttonText: 'Register' });
@@ -32,14 +20,22 @@ const Register = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.table({ ...state });
+        // console.table({ name, email, password });
+        axios
+            .post(`http://localhost:8000/api/register`, {
+                name,
+                email,
+                password
+            })
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     };
 
     const registerForm = () => (
         <form onSubmit={handleSubmit}>
             <div className="form-group">
                 <input
-                    value={state.name}
+                    value={name}
                     onChange={handleChange('name')}
                     type="text"
                     className="form-control"
@@ -48,7 +44,7 @@ const Register = () => {
             </div>
             <div className="form-group">
                 <input
-                    value={state.email}
+                    value={email}
                     onChange={handleChange('email')}
                     type="email"
                     className="form-control"
@@ -57,7 +53,7 @@ const Register = () => {
             </div>
             <div className="form-group">
                 <input
-                    value={state.password}
+                    value={password}
                     onChange={handleChange('password')}
                     type="password"
                     className="form-control"
@@ -65,7 +61,7 @@ const Register = () => {
                 />
             </div>
             <div className="form-group">
-                <button className="btn btn-outline-warning">{state.buttonText}</button>
+                <button className="btn btn-outline-warning">{buttonText}</button>
             </div>
         </form>
     );
