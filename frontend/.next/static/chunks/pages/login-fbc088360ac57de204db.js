@@ -1,1 +1,0 @@
-_N_E=(window.webpackJsonp_N_E=window.webpackJsonp_N_E||[]).push([[9],{O2ls:function(n,u,o){"use strict";o.r(u);var t=o("q1tI"),_=o.n(t),e=o("5Yp1"),i=_.a.createElement;u.default=function(){return i(e.a,null,"login page")}},u6Hu:function(n,u,o){(window.__NEXT_P=window.__NEXT_P||[]).push(["/login",function(){return o("O2ls")}])}},[["u6Hu",0,2,1,3,4]]]);
