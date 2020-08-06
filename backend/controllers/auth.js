@@ -1,8 +1,10 @@
 const User = require('../models/user');
 const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
-const {registerEmailParams} = require('../helpers/email');
+const expressJwt = require('express-jwt');
+const { registerEmailParams } = require('../helpers/email');
 const shortId = require('shortid');
+
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -40,13 +42,12 @@ exports.register = (req, res) => {
             })
             .catch(error => {
                 console.log('ses email on register', error);
-                res.status(400).json({
-                    error: `We could not verify your email. Please try again`
+                res.json({
+                    message: `We could not verify your email. Please try again`
                 });
             });
     });
 };
-
 
 exports.registerActivate = (req, res) => {
     const { token } = req.body;
@@ -100,12 +101,48 @@ exports.login = (req, res) => {
             });
         }
         // generate token and send to client
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d', });
         const { _id, name, email, role } = user;
 
         return res.json({
             token,
             user: { _id, name, email, role }
         });
+    });
+};
+
+exports.requireSignin = expressJwt({ secret:  process.env.JWT_SECRET, algorithms: ['HS256'] });
+// req.user
+
+exports.authMiddleware = (req, res, next) => {
+    const authUserId = req.user._id;
+    User.findOne({ _id: authUserId }).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User not found'
+            });
+        }
+        req.profile = user;
+        next();
+    });
+};
+
+exports.adminMiddleware = (req, res, next) => {
+    const adminUserId = req.user._id;
+    User.findOne({ _id: adminUserId }).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User not found'
+            });
+        }
+
+        if (user.role !== 'admin') {
+            return res.status(400).json({
+                error: 'Admin resource. Access denied'
+            });
+        }
+
+        req.profile = user;
+        next();
     });
 };
