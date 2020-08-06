@@ -1,11 +1,11 @@
-import { useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import Link from 'next/link';
+import Router from 'next/router';
 import axios from 'axios';
-import Link from 'next/link'
-import Router from 'next/router'
 import { showSuccessMessage, showErrorMessage } from '../helpers/alerts';
-import {API} from '../config'
-import {authenticate, isAuth} from '../helpers/auth'
+import { API } from '../config';
+import { authenticate, isAuth } from '../helpers/auth';
 
 const Login = () => {
     const [state, setState] = useState({
@@ -18,10 +18,9 @@ const Login = () => {
 
     useEffect(() => {
         isAuth() && Router.push('/');
-    }, [])
+    }, []);
 
-
-    const {  email, password, error, success, buttonText } = state;
+    const { email, password, error, success, buttonText } = state;
 
     const handleChange = name => e => {
         setState({ ...state, [name]: e.target.value, error: '', success: '', buttonText: 'Login' });
@@ -35,24 +34,19 @@ const Login = () => {
                 email,
                 password
             });
-
-            //console.log(response);
-            authenticate(response,()=>{
-                Router.push('/');
-            });
-
-
-
+            // console.log(response); // data > token / user
+            authenticate(response, () =>
+                isAuth() && isAuth().role === 'admin' ? Router.push('/admin') : Router.push('/user')
+            );
         } catch (error) {
             console.log(error);
             setState({ ...state, buttonText: 'Login', error: error.response.data.error });
         }
     };
 
-
     const loginForm = () => (
         <form onSubmit={handleSubmit}>
-         <div className="form-group">
+            <div className="form-group">
                 <input
                     value={email}
                     onChange={handleChange('email')}
@@ -84,7 +78,7 @@ const Login = () => {
                 <h1>Login</h1>
                 <br />
                 {success && showSuccessMessage(success)}
-                {error && showSuccessMessage(error)}
+                {error && showErrorMessage(error)}
                 {loginForm()}
             </div>
         </Layout>
