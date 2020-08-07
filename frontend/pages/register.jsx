@@ -9,21 +9,19 @@ import { isAuth} from '../helpers/auth'
 
 const Register = () => {
     const [state, setState] = useState({
-        name: '',
-        email: '',
-        password: '',
+        name: 'Ryan',
+        email: 'ryan@gmail.com',
+        password: 'rrrrrr',
         error: '',
         success: '',
         buttonText: 'Register'
     });
 
-    useEffect(() => {
-        isAuth() && Router.push('/');
-    }, [])
-
     const { name, email, password, error, success, buttonText } = state;
 
-
+    useEffect(() => {
+        isAuth() && Router.push('/');
+    }, []);
 
     const handleChange = name => e => {
         setState({ ...state, [name]: e.target.value, error: '', success: '', buttonText: 'Register' });
@@ -124,7 +122,7 @@ const Register = () => {
                 <h1>Register</h1>
                 <br />
                 {success && showSuccessMessage(success)}
-                {error && showSuccessMessage(error)}
+                {error && showErrorMessage(error)}
                 {registerForm()}
             </div>
         </Layout>
