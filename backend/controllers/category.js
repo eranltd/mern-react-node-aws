@@ -1,5 +1,7 @@
 const Category = require('../models/category');
 const slugify = require('slugify');
+const formidable = require('formidable');
+const AWS = require('aws-sdk');
 
 exports.create = (req, res) => {
     const { name, content } = req.body;
