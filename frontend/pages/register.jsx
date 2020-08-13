@@ -1,11 +1,10 @@
-import { useState , useEffect } from 'react';
-import Router from 'next/router'
-
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import Router from 'next/router';
 import axios from 'axios';
 import { showSuccessMessage, showErrorMessage } from '../helpers/alerts';
-import {API} from '../config'
-import { isAuth} from '../helpers/auth'
+import { API } from '../config';
+import { isAuth } from '../helpers/auth';
 
 const Register = () => {
     const [state, setState] = useState({

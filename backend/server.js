@@ -9,7 +9,7 @@ const app = express();
 
 // db
 mongoose
-    .connect(process.env.DATABASE_CLOUD, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(process.env.DATABASE_CLOUD, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log('DB connected'))
     .catch(err => console.log(err));
 
@@ -20,7 +20,8 @@ const categoryRoutes = require('./routes/category');
 
 // app middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb', type: 'application/json' }));
 // app.use(cors());
 app.use(cors({ origin: process.env.CLIENT_URL }));
 
