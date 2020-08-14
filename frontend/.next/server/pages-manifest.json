@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/links/[slug]": "pages/links/[slug].js",
-  "/user/link/create": "pages/user/link/create.js"
+  "/": "pages/index.js",
+  "/admin/category/[slug]": "pages/admin/category/[slug].js"
 }
