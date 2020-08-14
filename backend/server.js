@@ -15,7 +15,7 @@ mongoose
         useCreateIndex: true,
         useFindAndModify: false
     })
-    .then(() => console.log('DB connected'))
+    .then(() => console.log('\r\n\r\nMongoDB Atlas DB connected\r\n\r\n',process.env.DATABASE_CLOUD))
     .catch(err => console.log(err));
 
 // import routes
